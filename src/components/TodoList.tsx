@@ -1,3 +1,5 @@
+import DeleteButton from "./DeleteButton";
+
 const initialTodos = ["buy groceries", "walk the dog", "do the laundry"];
 
 export default function TodoList() {
@@ -11,7 +13,7 @@ export default function TodoList() {
           className="flex justify-between items-center px-8 h-[50px] cursor-pointer text-[14px] border-b border-black/[8%]"
         >
           <span>{todo}</span>
-          <button>❌</button>
+          <DeleteButton />
         </li>
       ))}
     </ul>
