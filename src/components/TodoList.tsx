@@ -1,19 +1,56 @@
+import { useState } from "react";
 import DeleteButton from "./DeleteButton";
 
-const initialTodos = ["buy groceries", "walk the dog", "do the laundry"];
-
 export default function TodoList() {
+  const [todos, setTodos] = useState([
+    {
+      id: 1,
+      text: "buy groceries",
+      isCompleted: false,
+    },
+    {
+      id: 2,
+      text: "walk the dog",
+      isCompleted: false,
+    },
+    {
+      id: 3,
+      text: "exercise",
+      isCompleted: false,
+    },
+  ]);
+
   return (
     <ul>
-      {initialTodos.map((todo) => (
+      {todos.map((todo) => (
         <li
-          key={todo} // would have been better if we have had id in our list and we had objects inside the list
-          // because todolist would not be more than 100 most likely. It is okay to use same keys. React can handle it with performance.
-
+          key={todo.id}
           className="flex justify-between items-center px-8 h-[50px] cursor-pointer text-[14px] border-b border-black/[8%]"
+          onClick={() => {
+            setTodos(
+              todos.map((t) => {
+                if (t.id === todo.id) {
+                  return { ...t, isCompleted: !t.isCompleted };
+                }
+
+                return t;
+              })
+            );
+          }}
         >
-          <span>{todo}</span>
-          <DeleteButton />
+          <span
+            className={`${todo.isCompleted ? "line-through text-[#ccc]" : ""}`}
+          >
+            {todo.text}
+          </span>
+          <button
+            onClick={(e) => {
+              e.stopPropagation(); // li also have onclick event (stop propagation for event bubbling)
+              setTodos(todos.filter((t) => t.id !== todo.id));
+            }}
+          >
+            ❌
+          </button>
         </li>
       ))}
     </ul>
