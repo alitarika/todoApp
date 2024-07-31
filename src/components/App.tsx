@@ -5,8 +5,14 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import TodoList from "./TodoList";
 
+type Todo = {
+  id: number;
+  text: string;
+  isCompleted: boolean;
+};
+
 function App() {
-  const [todos, setTodos] = useState([
+  const [todos, setTodos] = useState<Todo[]>([
     {
       id: 1,
       text: "buy groceries",
