@@ -1,34 +1,30 @@
 import { useState } from "react";
+import { useTodosContext } from "../lib/hooks";
 import Button from "./Button";
 
-export default function AddTodoForm(todos, setTodos) {
-  const [formText, setFormText] = useState("");
+export default function AddTodoForm() {
+  const [todoContent, setTodoContent] = useState("");
+  const { addTodo } = useTodosContext();
+
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        setTodos((prev) => [
-          ...prev,
-          {
-            id: prev.length + 1,
-            text: formText,
-            isCompleted: false,
-          },
-        ]);
-        setFormText("");
+        addTodo(todoContent);
+        setTodoContent("");
       }}
     >
-      <h2 className="font-medium text-[#231d15]">Add a todo</h2>
+      <h2 className="text-[#231d15] text-[16px] font-medium">Add a todo</h2>
       <input
-        onChange={(e) => {
-          setFormText(e.target.value);
-        }}
         type="text"
         autoFocus
         className="h-[45px] w-full border-[1px] border-[rgba(0,0,0,0.12)] rounded-[5px] ml-[0] mr-[0] my-[9px] px-[16px] py-[0] text-[14px]"
-        value={formText}
+        value={todoContent}
+        onChange={(e) => {
+          setTodoContent(e.target.value);
+        }}
       />
-      <Button buttonType="primary">Add to list</Button>
+      <Button>Add to list</Button>
     </form>
   );
 }

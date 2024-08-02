@@ -1,40 +1,42 @@
-import { useState } from "react";
 import DeleteButton from "./DeleteButton";
+import { useTodosContext } from "../lib/hooks";
 
-export default function TodoList({ todos, setTodos }) {
+export default function TodoList() {
+  const { todos, toggleTodo, isLoading } = useTodosContext();
+
   return (
-    <ul>
-      {todos.map((todo) => (
-        <li
-          key={todo.id}
-          className="flex justify-between items-center px-8 h-[50px] cursor-pointer text-[14px] border-b border-black/[8%]"
-          onClick={() => {
-            setTodos(
-              todos.map((t) => {
-                if (t.id === todo.id) {
-                  return { ...t, isCompleted: !t.isCompleted };
-                }
+    <ul className="col-[1/2] row-[2/3] bg-[#fff] [scrollbar-width:thin] relative">
+      {isLoading && (
+        <li className="h-full flex justify-center items-center font-semibold">
+          Loading todos...
+        </li>
+      )}
 
-                return t;
-              })
-            );
-          }}
-        >
-          <span
-            className={`${todo.isCompleted ? "line-through text-[#ccc]" : ""}`}
-          >
-            {todo.text}
-          </span>
-          <button
-            onClick={(e) => {
-              e.stopPropagation(); // li also have onclick event (stop propagation for event bubbling)
-              setTodos(todos.filter((t) => t.id !== todo.id));
+      {todos.length === 0 ? (
+        <li className="h-full flex justify-center items-center font-semibold">
+          Start by adding a todo
+        </li>
+      ) : null}
+
+      {todos.map((todo) => {
+        return (
+          <li
+            key={todo.id}
+            className={`flex justify-between items-center px-8 h-[50px] text-[14px] cursor-pointer border-b border-b-[rgba(0,0,0,0.08)]`}
+            onClick={() => {
+              toggleTodo(todo.id);
             }}
           >
-            ❌
-          </button>
-        </li>
-      ))}
+            <span
+              className={`${todo.completed ? "line-through text-[#ccc]" : ""}`}
+            >
+              {todo.content}
+            </span>
+
+            <DeleteButton id={todo.id} />
+          </li>
+        );
+      })}
     </ul>
   );
 }
